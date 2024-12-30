@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="plantilla/fragmentos.html :: headfiles">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Reservas</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        
+        <div th:replace="plantilla/fragmentos.html :: navigation"></div>
+
+        <div class="container mt-4">
+            <h3 th:switch="${operacion}">
+                <span th:case="'ADD'">Añadir una nueva reserva</span>
+                <span th:case="'DEL'">Eliminar una reserva</span>
+                <span th:case="'EDIT'">Editar una reserva</span>
+                <span th:case="*">Operación no soportada</span>
+            </h3>
+
+            <form method="post" th:object="${reserva}" class="needs-validation" novalidate>
+
+                <input type="number" hidden name="id" th:field="*{id}" th:value="${reserva.id}">
+                
+                <select class="form-select" th:field="*{horario}" name="horario" id="horario"
+                    th:attr="disabled=${operacion} == 'DEL' ? 'disabled' : null">
+                    <option th:each="horario : ${horarios}" th:value="${horario.instalacion_id}"
+                        th:text="${horario.instalacion_id}"></option>
+                </select>
+            </form>
+        </div>
+
+        <div th:replace="plantilla/fragmentos.html :: footer"></div>
+    </div>
+
+    <script>
+        // Script para habilitar la validación del formulario (Bootstrap)
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</body>
+
+</html>

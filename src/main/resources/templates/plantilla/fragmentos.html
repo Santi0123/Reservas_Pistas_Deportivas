@@ -49,6 +49,16 @@
                             </li>
                             <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
                                 <!-- SOLO ADMIN -->
+                                <a class="nav-link text-white dropdown-toggle" href="#" id="reservasDropdown" data-bs-toggle="collapse" data-bs-target="#reservasMenu" aria-expanded="false">
+                                    <i class="fa-regular fa-clock"></i> | Reservas
+                                </a>
+                                <ul class="collapse list-unstyled ps-3" id="reservasMenu">
+                                    <li><a class="nav-link text-white" href="/reservas">Listar</a></li>
+                                    <li><a class="nav-link text-white" href="/reservas/add">Alta</a></li>
+                                </ul>
+                            </li>
+                            <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
+                                <!-- SOLO ADMIN -->
                                 <a class="nav-link text-white dropdown-toggle" href="#" id="usuariosDropdown" data-bs-toggle="collapse" data-bs-target="#usuariosMenu" aria-expanded="false">
                                     <i class="fa-solid fa-users"></i> |  Usuarios
                                 </a>

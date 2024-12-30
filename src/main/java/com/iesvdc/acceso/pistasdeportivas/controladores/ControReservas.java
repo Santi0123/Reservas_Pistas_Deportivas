@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
+@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/reservas")
 public class ControReservas {
     
@@ -55,13 +57,14 @@ public class ControReservas {
     @GetMapping("/add")
     public String addReservas(Model model) {
         model.addAttribute("reserva", new Reserva());
+        model.addAttribute("operacion", "ADD");
         return "/reservas/add";
     }
     
     @PostMapping("/add")
     public String addReservas(@ModelAttribute("reserva") Reserva reserva) {
         repoReserva.save(reserva);
-        return "/redirect:reservas";
+        return "redirect:/reservas";
     }
 
     /*
@@ -72,6 +75,7 @@ public class ControReservas {
         Optional<Reserva> onReserva= repoReserva.findById(id);
         if(onReserva.isPresent()){
             model.addAttribute("reserva", onReserva.get());
+            model.addAttribute("operacion", "EDIT");
             return "/reservas/add";
         }else{
             model.addAttribute("mensaje", "La instalación no exsiste");
@@ -81,7 +85,7 @@ public class ControReservas {
     }
 
     @PostMapping("/edit/{id}")
-    public String postMethodName(@ModelAttribute("reserva") Reserva reserva) {
+    public String editReserva(@ModelAttribute("reserva") Reserva reserva) {
         repoReserva.save(reserva);
         return "redirect:/reservas";
     }
@@ -95,6 +99,7 @@ public class ControReservas {
         Optional<Reserva> onReserva = repoReserva.findById(id);
         if(onReserva.isPresent()){
             model.addAttribute("borrando", "verdadero");
+            model.addAttribute("operacion", "DEL");
             model.addAttribute("instalacion", onReserva.get());
             return "/resevas/add";
         }else{

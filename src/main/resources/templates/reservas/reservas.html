@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="plantilla/fragmentos.html :: headfiles">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Reservas</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        
+        <div th:replace="plantilla/fragmentos.html :: navigation"></div>
+
+        <div class="container mt-4">
+
+            <h2>Gestión de Reservas</h2>
+
+            
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Instalación</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Horario</th>
+                        <th scope="col">Editar Reservas</th>
+                        <th scope="col">Eliminar Reservas</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr th:each="reserva : ${reservas}">
+                        <th scope="row" th:text="${reserva.id}"></th>
+                        <td th:text="${reserva.usuario.username}"></td>
+                        <td th:text="${reserva.horario.instalacion.nombre}"></td>
+                        <td th:text="${reserva.fecha}"></td>
+                        <td th:text="${reserva.horario.horaInicio + ' - ' + reserva.horario.horaFin}"></td>
+                        <td><a class="btn btn-warning" href="/reservas/add">Editar</a></td>
+                        <td><a class="btn btn-danger" href="/reservas/add">Eliminar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a style="display: grid;" class="btn btn-success" href="/reservas/add">Añadir</a>
+        </div>
+    </div>
+</body>
+
+</html>
