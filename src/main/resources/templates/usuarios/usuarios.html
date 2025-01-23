@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="plantilla/fragmentos.html :: headfiles">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        
+        <div th:replace="plantilla/fragmentos.html :: navigation"></div>
+
+        <div class="container mt-4">
+
+            <h2>Gestión de Usuarios</h2>
+
+            
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Contraseña</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Editar Reservas</th>
+                        <th scope="col">Eliminar Reservas</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr th:each="usuario : ${usuarios}">
+                        <th scope="row" th:text="${usuario.id}"></th>
+                        <td th:text="${usuario.username}"></td>
+                        <td th:text="${usuario.email}"></td>
+                        <td th:text="${usuario.password}"></td>
+                        <td th:each="rol : ${usuario.tipo}" th:text="${rol}"></td>
+                        <td><a class="btn btn-warning" th:href="@{/usuario/edit/{id}(id=${usuario.id})}">Editar</a></td>
+                        <td><a class="btn btn-danger" th:href="@{/usuario/del/{id}(id=${usuario.id})}">Eliminar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a style="display: grid;" class="btn btn-success" href="/usuario/add">Añadir</a>
+        </div>
+        <div th:replace="plantilla/fragmentos.html :: footer"></div>
+    </div>
+</body>
+
+</html>
