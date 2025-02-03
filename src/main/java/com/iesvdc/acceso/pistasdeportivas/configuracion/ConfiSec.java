@@ -44,7 +44,7 @@ public class ConfiSec {
             (request) -> request
                 .requestMatchers(
                     "/webjars/**", "/img/**", "/login", 
-                    "/logout", "/acerca", "/denegado")
+                    "/logout", "/acerca", "/denegado", "/usuarios/**")
                     .permitAll()
                 .requestMatchers(
                     "/horario/**", "/instalacion/**","/usuario/**","/reservas/**","/usuario/**/**","/reservas/**/**")

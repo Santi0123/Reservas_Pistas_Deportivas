@@ -23,6 +23,7 @@ public class Usuario{
     private String password;    
     @Column(nullable = false, unique = true, length = 80)
     private String email; 
+    @Column(nullable = false)
     private boolean enabled;
     @Enumerated(EnumType.STRING)
     private Rol tipo;

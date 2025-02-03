@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="plantilla/fragmentos.html :: headfiles">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        .card {
+            max-width: 600px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            font-size: 1.5rem;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+        }
+        .btn-primary {
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div th:replace="plantilla/fragmentos.html :: navigation"></div>
+
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 th:switch="${operacion}" class="mb-0">
+                        <span th:case="'ADD'">Añadir un nuevo usuario</span>
+                        <span th:case="'DEL'">Eliminar un usuario</span>
+                        <span th:case="'EDIT'">Editar un usuario</span>
+                        <span th:case="*">Operación no soportada</span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" th:object="${usuario}" class="needs-validation" novalidate>
+                        <input type="number" hidden name="id" th:field="*{id}" th:value="${usuario.id}">
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="enabled" th:field="*{enabled}"
+                                th:attr="disabled=${operacion} == 'DEL' ? 'disabled' : null">
+                            <label for="enabled" class="form-check-label">Activado</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre</label>
+                            <input type="text" id="username" name="username" class="form-control" th:field="*{username}"
+                                th:attr="disabled=${operacion} == 'DEL' ? 'disabled' : null">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" th:field="*{email}"
+                                placeholder="user@gmail.com"
+                                th:attr="disabled=${operacion} == 'DEL' ? 'disabled' : null">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" id="password" name="password" class="form-control" th:field="*{password}"
+                                th:attr="disabled=${operacion} == 'DEL' ? 'disabled' : null">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tipo" class="form-label">Rol</label>
+                            <select class="form-select" th:field="*{tipo}" name="tipo" id="tipo"
+                                th:attr="disabled=${operacion} == 'DEL' ? 'disabled' : null">
+                                <option th:each="tipo : ${roles}" th:value="${tipo}"
+                                    th:text="${tipo}"></option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="plantilla/fragmentos.html :: footer"></div>
+    </div>
+
+    <script>
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</body>
+</html>
