@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head th:replace="~{plantilla/fragmentos.html :: headfiles}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Borrado</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .container-center {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .card-custom {
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            background: white;
+            max-width: 500px;
+        }
+        .spaced-buttons .btn {
+            margin: 5px;
+        }
+        footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid d-flex flex-column min-vh-100">
+        <header th:replace="plantilla/fragmentos.html :: navigation"></header>
+        
+        <main class="container container-center">
+            <div class="card card-custom text-center">
+                <h3 class="mb-4 text-danger">⚠️ Confirmar Borrado</h3>
+                <p class="text-muted">¿Estás seguro de que deseas eliminar esta reserva? Esta acción no se puede deshacer.</p>
+                <form method="post" th:object="${reserva}" class="needs-validation">
+                    
+                    <input type="hidden" name="id" th:field="*{id}">
+                    <input type="hidden" name="fecha" th:field="*{fecha}">
+                    <input type="hidden" name="usuario.id" th:field="*{usuario.id}">
+                    <input type="hidden" name="horario.id" th:field="*{horario.id}">
+                    
+                    <div class="form-group">
+                        <label><strong>Fecha:</strong></label>
+                        <p th:text="*{fecha}" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="form-group">
+                        <label><strong>Usuario:</strong></label>
+                        <p th:text="*{usuario.username}" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="form-group">
+                        <label><strong>Horario:</strong></label>
+                        <p th:text="*{horario.horaInicio} + ' - ' + *{horario.horaFin}" class="form-control-plaintext"></p>
+                    </div>
+                    
+                    <div class="form-group spaced-buttons">
+                        <button type="submit" class="btn btn-danger">Confirmar Borrado</button>
+                        <a class="btn btn-secondary" th:href="@{/reservas}">Volver</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+        
+        <footer th:replace="plantilla/fragmentos.html :: footer" class="mt-auto"></footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

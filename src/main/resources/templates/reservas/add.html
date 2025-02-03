@@ -1,58 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
-<head th:replace="plantilla/fragmentos.html :: headfiles">
+<head th:replace="~{plantilla/fragmentos.html :: headfiles}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Reservas</title>
+    <title>Document</title>
 </head>
 
 <body>
     <div class="container-fluid">
-        
         <div th:replace="plantilla/fragmentos.html :: navigation"></div>
-
         <div class="container mt-4">
-            <h3 th:switch="${operacion}">
-                <span th:case="'ADD'">Añadir una nueva reserva</span>
-                <span th:case="'DEL'">Eliminar una reserva</span>
-                <span th:case="'EDIT'">Editar una reserva</span>
-                <span th:case="*">Operación no soportada</span>
-            </h3>
 
-            <form method="post" th:object="${reserva}" class="needs-validation" novalidate>
+            <h3>Agregar Reserva</h3>
 
-                <input type="number" hidden name="id" th:field="*{id}" th:value="${reserva.id}">
-                
-                <select class="form-select" th:field="*{horario}" name="horario" id="horario"
-                    th:attr="disabled=${operacion} == 'DEL' ? 'disabled' : null">
-                    <option th:each="horario : ${horarios}" th:value="${horario.instalacion_id}"
-                        th:text="${horario.instalacion_id}"></option>
-                </select>
-            </form>
+            <div class="mb-3">
+                <label for="fecha">Seleccione una fecha</label>
+                <input type="date" name="fecha" id="fecha" class="form-control"
+                    th:value="${localdate != null ? localdate : ''}">
+            </div>
+
+            <div class="mb-3">
+                <form id="usuarioForm" method="get">
+                    <label for="usuario">Seleccione un usuario:</label>
+                    <select id="usuario" class="form-select">
+                        <option value="-1">Todos los usuarios</option>
+                        <option th:each="user : ${usuarios}" th:value="${user.id}" th:text="${user.username}"
+                            th:selected="${usuario} != null ? 
+                (${usuario.id} == ${user.id} ? 'selected':'false') : 'false'">
+                        </option>
+                    </select>
+                </form>
+            </div>
+
+            <div class="mb-3">
+                <form id="instalacionForm" method="get">
+                    <label for="instalacion">Seleccione una instalación:</label>
+                    <select id="instalacion" class="form-select">
+                        <option value="-1">Todas las instalaciones</option>
+                        <option th:each="inst : ${instalaciones}" th:value="${inst.id}" th:text="${inst.nombre}"
+                            th:selected="${instalacion} !=null  ?
+                (${instalacion.id} == ${inst.id} ? 'selected':'false') : 'false'">
+                        </option>
+                    </select>
+                </form>
+            </div>
+
+            <div class="mb-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Instalación</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Reservar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="horario : ${horarios}">
+                            <td th:text="${horario.id}">ID</td>
+                            <td th:text="${horario.instalacion.nombre}">Nombre</td>
+                            <td th:text="${horario.horaInicio}">Inicio</td>
+                            <td th:text="${horario.horaFin}">Fin</td>
+                            <td>
+                                <!-- <a class="btn btn-success"
+                                    th:href="|${instalacion.id}/horario/${horario.id}|">Reservar</a> -->
+                                <!-- <a class="btn btn-success"
+                                    th:href="@{/reservas/add/usuario/{usuarioID}/instalacion/{instalacionID}/horario/{horarioID}(usuarioID=${usuario.id}, instalacionID=${instalacion.id}, horarioID=${horario.id}, fecha=${fechaSeleccionada})}">
+                                    Reservar
+                                </a> -->
+                                <a class="btn btn-success reservarBtn" th:data-horario-id="${horario.id}">
+                                    Reservar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="mb-3">
+                <a class="btn btn-success" th:href="@{/reservas}">Volver</a>
+            </div>
         </div>
 
-        <div th:replace="plantilla/fragmentos.html :: footer"></div>
+        <div th:replace="plantilla/fragmentos.html ::footer"></div>
     </div>
 
-    <script>
-        // Script para habilitar la validación del formulario (Bootstrap)
-        (function () {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-
-            Array.prototype.slice.call(forms)
-                .forEach(function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
-    </script>
 </body>
+
+<script>
+
+    // Función para formatear fechas en formato yyyy-MM-dd
+    function formatDate(date) {
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, "0");
+        let day = date.getDate().toString().padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
+
+    // Obtener las fechas mínima y máxima
+    let today = new Date();
+    let maxDate = new Date();
+    maxDate.setDate(today.getDate() + 7); // 7 días desde hoy
+
+    // Asignar valores de min y max al input de fecha
+    let fechaInput = document.getElementById("fecha");
+    fechaInput.min = formatDate(today);  // Fecha mínima: hoy
+    fechaInput.max = formatDate(maxDate); // Fecha máxima: hoy + 7 días
+
+    $("#usuario").change(() => {
+
+        let usuarioID = $("#usuario").val();
+        let usuarioForm = $("#usuarioForm");
+        let fechaSeleccionada = document.getElementById("fecha").value;
+
+        usuarioForm.append($("<input />").attr("type", "hidden").attr("name", "fecha").attr("value", $("#fecha").val()));
+
+        if (usuarioID == -1) {
+            let url = `/reservas/add`;
+            usuarioForm.attr("action", url);
+            usuarioForm.submit();
+        } else {
+            //let url = `/reservas/add/usuario/${usuarioID}`;
+            let url = `/reservas/add/usuario/${usuarioID}?fecha=${fechaSeleccionada}`;
+            usuarioForm.attr("action", url);
+            usuarioForm.submit();
+        }
+    });
+
+    $("#instalacion").change(() => {
+
+        let usuarioID = $("#usuario").val();
+        let instalacionID = $("#instalacion").val();
+        let instalacionForm = $("#instalacionForm");
+        let fechaSeleccionada = document.getElementById("fecha").value;
+
+        instalacionForm.append($("<input />").attr("type", "hidden").attr("name", "fecha").attr("value", $("#fecha").val()));
+
+        if (instalacionID == -1) {
+            //let url = `/reservas/add/usuario/${usuarioID}`;
+            let url = `/reservas/add/usuario/${usuarioID}?fecha=${fechaSeleccionada}`;
+            instalacionForm.attr("action", url);
+            instalacionForm.submit();
+        } else {
+            //let url = `/reservas/add/usuario/${usuarioID}/instalacion/${instalacionID}`;
+            let url = `/reservas/add/usuario/${usuarioID}/instalacion/${instalacionID}?fecha=${fechaSeleccionada}`;
+            instalacionForm.attr("action", url);
+            instalacionForm.submit();
+        }
+    });
+
+    $("#fecha").change(() => {
+
+        let fechaSeleccionada = $("#fecha").val();
+    });
+
+    document.querySelectorAll(".reservarBtn").forEach(function (button) {
+        button.addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            let usuarioID = document.getElementById("usuario").value;
+            let instalacionID = document.getElementById("instalacion").value;
+            let horarioID = this.getAttribute("data-horario-id");
+            let fechaSeleccionada = document.getElementById("fecha").value;
+
+            // Verificar que todos los campos estén seleccionados
+            if (usuarioID === "-1" || instalacionID === "-1" || !fechaSeleccionada) {
+                alert("Por favor, selecciona todos los campos.");
+                return;
+            }
+
+            let url = `/reservas/add/usuario/${usuarioID}/instalacion/${instalacionID}/horario/${horarioID}?fecha=${fechaSeleccionada}`;
+
+            window.location.href = url;
+        })
+    })
+
+</script>
 
 </html>

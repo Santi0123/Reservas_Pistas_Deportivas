@@ -47,7 +47,7 @@ public class ConfiSec {
                     "/logout", "/acerca", "/denegado")
                     .permitAll()
                 .requestMatchers(
-                    "/horario/**", "/instalacion/**","/reservas/**")
+                    "/horario/**", "/instalacion/**","/usuario/**","/reservas/**","/usuario/**/**","/reservas/**/**")
                     .hasAuthority("ADMIN")
                 .requestMatchers(
                     "/mis-datos/**", "/mis-datos/*/**" )

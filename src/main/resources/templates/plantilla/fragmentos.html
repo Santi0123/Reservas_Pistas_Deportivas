@@ -116,21 +116,24 @@
         </div>
     </div>           
 
-        <div th:fragment="footer">
-            <footer>
-                <h5>© 2024 IES Virgen del Carmen</h5>
-                <p>Entró en el sistema como:
-                    <span th:text="${#authentication.name}"></span>
-                    (<span th:text="${#authentication.authorities[0]}"></span>)</p>
-                <p sec:authorize="hasAuthority('ADMIN')">
-                    <b>Entró en el sistema como admin</b>
-                </p>
-                
-            </footer>
-            <script src="/webjars/jquery/jquery.min.js"></script>
-            <script src="/webjars/popper.js/umd/popper.min.js"></script>
-            <script src="/webjars/bootstrap/js/bootstrap.bundle.js"></script>
-        </div>
+    <div th:fragment="footer">
+        <footer class="bg-dark text-light text-center py-3 mt-4">
+            <h5 class="mb-1">© 2024 IES Virgen del Carmen</h5>
+            <p class="mb-1">
+                Entró en el sistema como: 
+                <strong th:text="${#authentication.name}"></strong> 
+                (<span th:text="${#authentication.authorities[0]}"></span>)
+            </p>
+            <p sec:authorize="hasAuthority('ADMIN')" class="text-warning font-weight-bold">
+                🔑 Acceso de administrador
+            </p>
+        </footer>
+    
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="/webjars/popper.js/umd/popper.min.js"></script>
+        <script src="/webjars/bootstrap/js/bootstrap.bundle.js"></script>
+    </div>
+    
     </div>
 </body>
 
