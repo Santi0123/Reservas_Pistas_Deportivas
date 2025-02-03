@@ -9,14 +9,13 @@
 
 <body>
     <div class="container-fluid">
-        
+
         <div th:replace="plantilla/fragmentos.html :: navigation"></div>
 
         <div class="container mt-4">
 
             <h2>Gestión de Usuarios</h2>
 
-            
             <table class="table table-striped mt-4">
                 <thead>
                     <tr>
@@ -32,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                     <tr th:each="usuario : ${usuarios}">
                         <th scope="row" th:text="${usuario.id}"></th>
                         <td th:text="${usuario.username}"></td>
@@ -47,9 +46,59 @@
             </table>
 
             <a style="display: grid;" class="btn btn-success mb-3" href="/usuario/add">Añadir</a>
+            <p>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a th:if="${usuario} == null" class="page-link"
+                                th:href="${page.hasPrevious()} ? |/usuario?page=${page.number - 1}| : '#'">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                Anterior
+                            </a>
+                            <a th:unless="${usuario} == null" class="page-link"
+                                th:href="${page.hasPrevious()} ? |/usuario/${usuario.id}?page=${page.number - 1}| : '#'">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                Anterior
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link active"
+                                th:text="|Estás en la página ${page.number + 1} de ${page.totalPages}|" href="#">1</a></li>
+                        <li class="page-item">
+                            <a th:if="${usuario} == null" class="page-link"
+                                th:href="${page.hasNext()} ? |/usuario?page=${page.number + 1}| : '#'">
+                                Siguiente
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </a>
+                            <a th:unless="${usuario} == null" class="page-link"
+                                th:href="${page.hasNext()} ? |/usuario/${usuario.id}?page=${page.number + 1}| : '#'">
+                                Siguiente
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </p>
+            
         </div>
         <div th:replace="plantilla/fragmentos.html :: footer"></div>
     </div>
 </body>
+
+<script>
+    $("#instalacion").change(() => {
+        let instalacionID = $("#instalacion").val();
+        let formulario = $("#instalacionForm");
+        if (instalacionID == -1) {
+            let url = "/horario";
+            formulario.attr("action", url);
+            formulario.submit();
+        } else {
+            let url = "/horario/instalacion/" + instalacionID;
+            formulario.attr("action", url);
+            formulario.submit();
+        }
+    });
+
+</script>
 
 </html>

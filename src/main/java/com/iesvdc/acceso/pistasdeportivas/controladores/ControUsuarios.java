@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -32,9 +35,11 @@ public class ControUsuarios {
     RepoUsuario repoUsuario;
     
     @GetMapping("")
-    public String getUsuarios(Model model) {
-        List<Usuario> usuarios = repoUsuario.findAll();
-        model.addAttribute("usuarios", usuarios);
+    public String getUsuarios(Model model, @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        
+        Page<Usuario> page = repoUsuario.findAll(pageable);
+        model.addAttribute("page", page);
+        model.addAttribute("usuarios", page.getContent());
         model.addAttribute("roles", Rol.values());
     
         return "usuarios/usuarios";

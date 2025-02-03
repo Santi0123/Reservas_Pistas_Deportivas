@@ -5,6 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Reservas</title>
+    <style>
+        .usuario-info {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0056b3;
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .usuario-info span {
+            font-weight: normal;
+            color: #333;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,7 +32,7 @@
 
         <div class="card card-custom">
             <h2 class="text-center text-primary">Mis Reservas</h2>
-            <p th:text="${usuario.username}">Usuario:</p>
+            <p class="usuario-info"><strong>Usuario:</strong> <span th:text="${usuario.username}"></span></p>
             <table class="table table-hover table-striped mt-4 text-center">
                 <thead class="thead-dark">
                     <tr>
@@ -23,7 +41,6 @@
                         <th>Instalación</th>
                         <th>Fecha</th>
                         <th>Horario</th>
-                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,11 +50,6 @@
                         <td th:text="${reserva.horario.instalacion.nombre}"></td>
                         <td th:text="${reserva.fecha}"></td>
                         <td th:text="${reserva.horario.horaInicio + ' - ' + reserva.horario.horaFin}"></td>
-                        <td>
-                            <a class="btn btn-danger btn-sm btn-icon" th:href="@{/reservas/del/{id}(id=${reserva.id})}">
-                                <i class="fas fa-trash-alt"></i> Eliminar
-                            </a>
-                        </td>
                     </tr>
                 </tbody>
             </table>
