@@ -25,8 +25,9 @@
                         <th scope="col">Email</th>
                         <th scope="col">Contraseña</th>
                         <th scope="col">Rol</th>
-                        <th scope="col">Editar Reservas</th>
-                        <th scope="col">Eliminar Reservas</th>
+                        <th scope="col">Activado</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
 
                     </tr>
                 </thead>
@@ -38,13 +39,14 @@
                         <td th:text="${usuario.email}"></td>
                         <td th:text="${usuario.password}"></td>
                         <td th:each="rol : ${usuario.tipo}" th:text="${rol}"></td>
+                        <td th:text="${usuario.enabled}"></td>
                         <td><a class="btn btn-warning" th:href="@{/usuario/edit/{id}(id=${usuario.id})}">Editar</a></td>
                         <td><a class="btn btn-danger" th:href="@{/usuario/del/{id}(id=${usuario.id})}">Eliminar</a></td>
                     </tr>
                 </tbody>
             </table>
 
-            <a style="display: grid;" class="btn btn-success" href="/usuario/add">Añadir</a>
+            <a style="display: grid;" class="btn btn-success mb-3" href="/usuario/add">Añadir</a>
         </div>
         <div th:replace="plantilla/fragmentos.html :: footer"></div>
     </div>

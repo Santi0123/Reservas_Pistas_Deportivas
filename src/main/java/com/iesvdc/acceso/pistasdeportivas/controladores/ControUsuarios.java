@@ -43,7 +43,9 @@ public class ControUsuarios {
 
     @GetMapping("/add")
     public String addUsuarios(Model model) {
-        model.addAttribute("usuario", new Usuario());
+        Usuario usuario = new Usuario();
+        usuario.setEnabled(false);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("roles", Rol.values());
         model.addAttribute("operacion", "ADD");
         return "/usuarios/add";
@@ -61,6 +63,7 @@ public class ControUsuarios {
         Optional<Usuario> onUsuario = repoUsuario.findById(id);
         if (onUsuario.isPresent()) {
             model.addAttribute("usuario", onUsuario.get());
+            model.addAttribute("roles", Rol.values());
             model.addAttribute("operacion", "EDIT");
             return "/usuarios/add";
         }else{
@@ -72,6 +75,13 @@ public class ControUsuarios {
     
     @PostMapping("/edit/{id}")
     public String editUsuarios(@ModelAttribute("usuario") Usuario usuario) {
+        if (usuario.getPassword().length() > 4) {
+            usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword()));
+        }else{
+            Usuario usuarioOld = repoUsuario.findById(usuario.getId()).get();
+            usuario.setPassword(usuarioOld.getPassword());
+        }
+
         repoUsuario.save(usuario);
         return "redirect:/usuario";
     }
@@ -83,6 +93,7 @@ public class ControUsuarios {
             model.addAttribute("borrando", "verdadero");
             model.addAttribute("operacion", "DEL");
             model.addAttribute("usuario", onUsuario.get());
+            model.addAttribute("roles", onUsuario.get().getTipo());
             return "/usuarios/add";
         }else{
             model.addAttribute("mensaje", "El usuario no existe");
