@@ -3,7 +3,7 @@
 | Alumnos              | Ángela Romero Lobo    | Santiago Fuente Espinosa |
 | -------------------- | ---------------------- | ------------------------ |
 | **Fecha**      | *Inicio: 12/12/2024* | *Fin: 04/02/2025*      |
-| **Curso**      | *2º DAM *            | *2º DAM*              |
+| **Curso**      | *2º DAM*            | *2º DAM*              |
 | **Asignatura** | *Acceso a Datos*     | *Accesos a Datos*      |
 
 # Documentación Modelos y Repositorios
