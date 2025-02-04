@@ -64,12 +64,6 @@
                             <td th:text="${horario.horaInicio}">Inicio</td>
                             <td th:text="${horario.horaFin}">Fin</td>
                             <td>
-                                <!-- <a class="btn btn-success"
-                                    th:href="|${instalacion.id}/horario/${horario.id}|">Reservar</a> -->
-                                <!-- <a class="btn btn-success"
-                                    th:href="@{/reservas/add/usuario/{usuarioID}/instalacion/{instalacionID}/horario/{horarioID}(usuarioID=${usuario.id}, instalacionID=${instalacion.id}, horarioID=${horario.id}, fecha=${fechaSeleccionada})}">
-                                    Reservar
-                                </a> -->
                                 <a class="btn btn-success reservarBtn" th:data-horario-id="${horario.id}">
                                     Reservar</a>
                             </td>
