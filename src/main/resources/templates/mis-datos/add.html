@@ -22,16 +22,14 @@
 
             <div class="mb-3">
                 <form id="usuarioForm" method="get">
-                    <label for="usuario">Seleccione un usuario:</label>
-                    <select id="usuario" class="form-select">
-                        <option value="-1">Todos los usuarios</option>
-                        <option th:each="user : ${usuarios}" th:value="${user.id}" th:text="${user.username}"
-                            th:selected="${usuario} != null ? 
-                (${usuario.id} == ${user.id} ? 'selected':'false') : 'false'">
-                        </option>
+                    <label for="usuario">Usuario logueado:</label>
+                    <select id="usuario" class="form-select" disabled>
+                        <option th:value="${usuario.id}" th:text="${usuario.username}"></option>
                     </select>
                 </form>
             </div>
+
+
 
             <div class="mb-3">
                 <form id="instalacionForm" method="get">
@@ -39,9 +37,9 @@
                     <select id="instalacion" class="form-select">
                         <option value="-1">Todas las instalaciones</option>
                         <option th:each="inst : ${instalaciones}" th:value="${inst.id}" th:text="${inst.nombre}"
-                            th:selected="${instalacion} !=null  ?
-                (${instalacion.id} == ${inst.id} ? 'selected':'false') : 'false'">
+                            th:selected="${instalacion != null and inst.id == instalacion.id}">
                         </option>
+
                     </select>
                 </form>
             </div>
@@ -74,7 +72,7 @@
             </div>
 
             <div class="mb-3">
-                <a class="btn btn-success" th:href="@{/reservas}">Volver</a>
+                <a class="btn btn-success" th:href="@{/mis-datos}">Volver</a>
             </div>
         </div>
 
@@ -112,12 +110,11 @@
         usuarioForm.append($("<input />").attr("type", "hidden").attr("name", "fecha").attr("value", $("#fecha").val()));
 
         if (usuarioID == -1) {
-            let url = `/reservas/add`;
+            let url = `/mis-datos/add`;
             usuarioForm.attr("action", url);
             usuarioForm.submit();
         } else {
-            //let url = `/reservas/add/usuario/${usuarioID}`;
-            let url = `/reservas/add/usuario/${usuarioID}?fecha=${fechaSeleccionada}`;
+            let url = `/mis-datos/add/usuario/${usuarioID}?fecha=${fechaSeleccionada}`;
             usuarioForm.attr("action", url);
             usuarioForm.submit();
         }
@@ -133,13 +130,11 @@
         instalacionForm.append($("<input />").attr("type", "hidden").attr("name", "fecha").attr("value", $("#fecha").val()));
 
         if (instalacionID == -1) {
-            //let url = `/reservas/add/usuario/${usuarioID}`;
-            let url = `/reservas/add/usuario/${usuarioID}?fecha=${fechaSeleccionada}`;
+            let url = `/mis-datos/add/usuario/${usuarioID}?fecha=${fechaSeleccionada}`;
             instalacionForm.attr("action", url);
             instalacionForm.submit();
         } else {
-            //let url = `/reservas/add/usuario/${usuarioID}/instalacion/${instalacionID}`;
-            let url = `/reservas/add/usuario/${usuarioID}/instalacion/${instalacionID}?fecha=${fechaSeleccionada}`;
+            let url = `/mis-datos/add/usuario/${usuarioID}/instalacion/${instalacionID}?fecha=${fechaSeleccionada}`;
             instalacionForm.attr("action", url);
             instalacionForm.submit();
         }
@@ -166,7 +161,7 @@
                 return;
             }
 
-            let url = `/reservas/add/usuario/${usuarioID}/instalacion/${instalacionID}/horario/${horarioID}?fecha=${fechaSeleccionada}`;
+            let url = `/mis-datos/add/usuario/${usuarioID}/instalacion/${instalacionID}/horario/${horarioID}?fecha=${fechaSeleccionada}`;
 
             window.location.href = url;
         })

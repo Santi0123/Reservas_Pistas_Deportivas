@@ -1,9 +1,11 @@
 package com.iesvdc.acceso.pistasdeportivas.controladores;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -189,7 +191,11 @@ public class ControReservas {
 
     @PostMapping("/add/usuario/{usuarioID}/instalacion/{instalacionID}/horario/{horarioID}")
     public String addReservas(@ModelAttribute("reserva") Reserva reserva) {
-        repoReserva.save(reserva);
+        if (reserva.getFecha().isAfter(LocalDate.now().minusDays(1)) &&
+            reserva.getFecha().isBefore(LocalDate.now().plusWeeks(1))) {
+            repoReserva.save(reserva);
+            
+        }
         return "redirect:/reservas";
     }
 

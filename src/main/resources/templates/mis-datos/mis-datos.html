@@ -41,6 +41,7 @@
                         <th>Instalación</th>
                         <th>Fecha</th>
                         <th>Horario</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,10 +51,19 @@
                         <td th:text="${reserva.horario.instalacion.nombre}"></td>
                         <td th:text="${reserva.fecha}"></td>
                         <td th:text="${reserva.horario.horaInicio + ' - ' + reserva.horario.horaFin}"></td>
+                        <td>
+                            <a class="btn btn-danger btn-sm btn-icon" th:href="@{/mis-datos/del/{id}(id=${reserva.id})}">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
 
+        <div class="text-center mt-4">
+            <a class="btn btn-success btn-lg" href="/mis-datos/add">
+                <i class="fas fa-plus-circle"></i> Añadir Reserva
+            </a>
         </div>
     </div>
 
